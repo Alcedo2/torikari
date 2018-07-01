@@ -7,6 +7,7 @@ class Ckuma : chikin
 
     public Ckuma(GameObject obj) : base(obj) {
         // playerタグを追従するカメラのアセット入れてるから設定
+        //　結局カメラ追従別の方法を取ったのでこの処理不要
         myobj.tag = "Player";
     }
 
