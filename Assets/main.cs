@@ -5,12 +5,17 @@ using System;
 public class main : MonoBehaviour {
 
     public GameObject chikObj;
+    public GameObject kumaObj;
     private List<chikin> chikinList;
+    private Ckuma kuma;
 	// Use this for initialization
 	void Start () {
-        // リストはnewしてから使う
+        // newしてから使うものをnewしとく
         chikinList = new List<chikin>();
-	}
+
+        // プレイヤーの熊を作ります
+        kuma = new Ckuma(kumaObj);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -31,20 +36,17 @@ public class main : MonoBehaviour {
             }
             // 生きてたら動かしましょうね
             chikinList[i].moveRondom();
+
+            // 衝突チェック
+            float x = kuma.position().x;
+            float z = kuma.position().z;
+            if (chikinList[i].isClashed(x,z))
+            {
+                Debug.Log("クマが鶏にダイレクトアタック");
+            }
         }
 
-        // 拡張for文だと削除したときの関係でエラーが出るみたい
-        //foreach (chikin chik in chikinList)
-        //{
-        //    // ここで死んでる奴は消しときましょう
-        //    if (!chik.isAlive())
-        //    {
-        //        chikinList.Remove(chik);
-        //        continue;
-        //    }
-        //    // 生きてたら動かしましょうね
-        //    chik.moveRondom();
-        //}
+
     }
 
     // Instantiateが1MonoBehaviorのメンバだったのでmainで生成する。
@@ -61,9 +63,18 @@ public class main : MonoBehaviour {
     // キー入力を監視
     private void keyInput()
     {
-        if(Input.GetKeyUp("space"))
+        if(Input.GetKeyUp(KeyCode.Space))
         {
             createChiks(0,0);
         }
+        if (Input.GetKey(KeyCode.UpArrow))
+            kuma.move("up");
+        if (Input.GetKey(KeyCode.RightArrow))
+            kuma.move("right");
+        if (Input.GetKey(KeyCode.LeftArrow))
+            kuma.move("left");
+        if (Input.GetKey(KeyCode.DownArrow))
+            kuma.move("down");
+
     }
 }

@@ -2,17 +2,20 @@
 
 public class chikin
 {
-    // いじらないやつはとりあえずprivateで宣言
-    private GameObject myobj;
+    // いじらないやつはとりあえずprivate(継承して使いたい場合protected)で宣言
+    protected GameObject myobj;
 
-    // 地面の枠のサイズ
+    // 地面の枠のサイズ 基本変えないからprivate
     private const int H = 50, W = 50;
 
     // 生きてる？
-    private bool alive;
+    protected bool alive;
 
     // 移動量
-    private float delta = 1;
+    protected float delta = 1;
+
+    // 衝突マージン
+    private const int margin = 10;
 
     // コンストラクタ　chikinオブジェクトを生成したときに呼び出される関数で要は初期化
     // 引数を変えることで複数作ることも出来るよ
@@ -38,6 +41,22 @@ public class chikin
 
     }
 
+    // 衝突チェック
+    public bool isClashed(float x, float z)
+    {
+        Vector3 positoin = myobj.transform.position;
+        if(positoin.x - margin < x && x < positoin.x + margin 
+            && positoin.z - margin < z && z < positoin.z + margin)
+        {
+            // 熊に殺されちゃった
+            alive = false;
+            death();
+            return true;
+        }
+
+        return false;
+    }
+
     // alive自体をpublicにして直接参照してもいいんだけど
     // クラスの変数はグループ開発ではprivateが無難なのでここでもこの面倒なことやってます
     public bool isAlive()
@@ -45,7 +64,7 @@ public class chikin
         return alive;
     }
 
-    private void death()
+    protected void death()
     {
         GameObject.Destroy(myobj);
     }
